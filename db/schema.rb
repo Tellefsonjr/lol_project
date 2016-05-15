@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160509160600) do
+ActiveRecord::Schema.define(version: 20160510035302) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "champion_masteries", force: :cascade do |t|
     t.integer  "profile_id"
@@ -26,7 +29,7 @@ ActiveRecord::Schema.define(version: 20160509160600) do
     t.integer  "current_points"
   end
 
-  add_index "champion_masteries", ["profile_id"], name: "index_champion_masteries_on_profile_id"
+  add_index "champion_masteries", ["profile_id"], name: "index_champion_masteries_on_profile_id", using: :btree
 
   create_table "champions", force: :cascade do |t|
     t.integer  "championId"
@@ -75,9 +78,10 @@ ActiveRecord::Schema.define(version: 20160509160600) do
     t.integer  "timestamp",      limit: 8
     t.integer  "championId"
     t.integer  "masteryPoints"
+    t.integer  "mdScore"
   end
 
-  add_index "matches", ["profile_id"], name: "index_matches_on_profile_id"
+  add_index "matches", ["profile_id"], name: "index_matches_on_profile_id", using: :btree
 
   create_table "profiles", force: :cascade do |t|
     t.string   "summonerName"
@@ -89,15 +93,6 @@ ActiveRecord::Schema.define(version: 20160509160600) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "profile_id"
-  end
-
-  add_index "users", ["profile_id"], name: "index_users_on_profile_id"
-
+  add_foreign_key "champion_masteries", "profiles"
+  add_foreign_key "matches", "profiles"
 end
