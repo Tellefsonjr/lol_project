@@ -198,11 +198,10 @@
 }
 #champ_chart{
 	margin-bottom: 30px;
-	margin-top: 50px;
 }
 #graph_container{
 	padding: 5px;
-	background-color: rgba(23, 23, 23, 0.4);
+	background-color: rgba(23, 23, 23, 0.5);
   color: white
 }
 tspan{
@@ -263,8 +262,10 @@ text{
   -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
   filter: grayscale(100%);
 }
-
-
+/* Relative class just to handle all the absolute positions*/
+.relative{
+  position: relative;
+}
 .right {
   margin-left:400px;
 }

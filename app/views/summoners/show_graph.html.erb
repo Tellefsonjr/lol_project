@@ -1,15 +1,14 @@
 <body style="background-image: url(<%= @champion.splash %>)" class="background">
 	<div class="container container-fluid">
-		<div class="container" id="graph_container">
-				<div id="champ_div">
-					<div class="row">
-
+					<div class="row"  id="graph_container">
 						<div class="col-md-6">
+							<div class="relative">
 
-							<h1 class="text-center white"><%= @champion.name %><small><%= @champion.title %></small></h1>
-							<img class="img img-responsive img-thumb" id="layered_icon" height="90px" width="90px" src="<%= @champion.icon %>">
-							<img class="img img-responsive" id="layered_border" src="/images/Champion_mastery_border_<%= @champion_mastery.championLevel %>.png"  alt="" />
+								<h1 class="text-center white"><%= @champion.name %><small><%= @champion.title %></small></h1>
+								<img class="img img-responsive img-thumb" id="layered_icon" height="90px" width="90px" src="<%= @champion.icon %>">
+								<img class="img img-responsive" id="layered_border" src="/images/Champion_mastery_border_<%= @champion_mastery.championLevel %>.png"  alt="" />
 
+							</div>
 						</div>
 						<div class="col-lg-6">
 							<h2 class="text-center page-header white"><%= @summoner.summonerName %>'s Mastery Stats: </h2>
@@ -33,11 +32,9 @@
 							</h4>
 						</div>
 						<div class="col-md-4">
-								<h4>
-									Total Pts:
-									<br><%= @champion_mastery.current_points %>
-								</h4>
-								<br>
+								<h4>Total Pts:
+								<br> <%= @champion_mastery.current_points %>
+							</h4>
 								<h4>
 									Last Played: <%= DateTime.strptime((@champion_mastery.lastPlayTime).to_s,'%s').strftime('%m/%d/%y') %>
 								</h4>
@@ -57,42 +54,71 @@
 
 					</div>
 				</div>
-		</div>
-
+<!-- Modal tabinated tab1 = Match History Chart, tab2 = Player AVG Stats, tab3 = Champion Lore/Info -->
 				<!-- <%= select(:selected, "selection", options_for_select(Match.columns.map {|p| [ p.name ] }), :include_blank => false)%>
 			<h1 id="selecteddd"><%=  %></h1> -->
-			<div id="chart_area">
-				<span class="glyphicon glyphicon-question-sign" style="color:white" data-toggle="tooltip" data-placement="right" title="Click on a chart node to view your full match details!"></span>
-				<%= line_chart @matches.map{ |m| [m.matchId, m.mdScore]}, discrete: true, label: "md Score", xtitle: "Match Ids", ytitle: "md Score", id: "champ_chart" %>
-				<span class="glyphicon glyphicon-question-sign" style="color:white" data-toggle="tooltip" data-placement="right" title="MD Score is a loose interpretation of your performance in each match"></span>
-				<div class="page-header" style="display: inline">
-					<form action='' class='navbar-form navbar-right' id="compare_search" method='' role="search">
-						<div class="form-group">
-							<input type='hidden' name="authenticity_token" value="<%= form_authenticity_token %>">
-							<input type='hidden' name='summonerName' value='<%= @summoner["summonerName"] %>'>
-							<input type="hidden" name="region" value="<%= @summoner['region'] %>">
-							<input type="hidden" name="championId" value="<%= @champion['championId'] %>">
-							<input class='form-control form-control-block' name='summoner[summonerName]' type='text' placeholder='Summoner Name' required></h3>
-							<select class='form-control form-control-block' name='summoner[region]' required autofocused>
-								<option value="na">NA</option>
-								<option value="br">BR</option>
-								<option value="eune">EUNE</option>
-								<option value="euw">EUW</option>
-								<option value="jp">JP</option>
-								<option value="kr">KR</option>
-								<option value="lan">LAN</option>
-								<option value="las">LAS</option>
-								<option value="oce">OCE</option>
-								<option value="ru">RU</option>
-								<option value="tr">TR</option>
-							</select>
-							<button type="submit" class="btn btn-default"><span class='glyphicon glyphicon-search'> </span></button>
-						</div>
-						<p class="text-left" style="color:white;">Compare against another summoner: (*currently unavailable) </p>
-					</form>
+
+			<ul class="nav nav-tabs" id="tabContent">
+			        <li class="active"><a href="#match_history" data-toggle="tab">Match History</a></li>
+			        <li><a href="#stat_averages" data-toggle="tab">Stat Averages</a></li>
+			        <li><a href="#champion_info" data-toggle="tab">Champion Info</a></li>
+			</ul>
+
+			      <div class="tab-content">
+			        <div class="tab-pane active" id="match_history">
+								<div class="row" id="chart_area">
+									<div class="col-md-7">
+										<h2 class="white"><%= @summoner.summonerName %>'s Match History as <%= @champion.name %> </h2>
+										<h4><small>First time here <span class="glyphicon glyphicon-question-sign" style="color:white" data-toggle="tooltip" data-placement="right" title="Click on a chart node to view your full match details!"></span></small></h4>
+									</div>
+									<div class="col-md-5">
+										<form action='' class='navbar-form navbar-right' id="compare_search" method='' role="search">
+											<div class="form-group">
+												<input type='hidden' name="authenticity_token" value="<%= form_authenticity_token %>">
+												<input type='hidden' name='summonerName' value='<%= @summoner["summonerName"] %>'>
+												<input type="hidden" name="region" value="<%= @summoner['region'] %>">
+												<input type="hidden" name="championId" value="<%= @champion['championId'] %>">
+												<input class='form-control form-control-block' name='summoner[summonerName]' type='text' placeholder='Summoner Name' required></h3>
+												<select class='form-control form-control-block' name='summoner[region]' required autofocused>
+													<option value="na">NA</option>
+													<option value="br">BR</option>
+													<option value="eune">EUNE</option>
+													<option value="euw">EUW</option>
+													<option value="jp">JP</option>
+													<option value="kr">KR</option>
+													<option value="lan">LAN</option>
+													<option value="las">LAS</option>
+													<option value="oce">OCE</option>
+													<option value="ru">RU</option>
+													<option value="tr">TR</option>
+												</select>
+												<button type="submit" class="btn btn-default"><span class='glyphicon glyphicon-search'> </span></button>
+											</div>
+											<p class="text-left" style="color:white;">Compare against another summoner: (*currently unavailable) </p>
+										</form>
+									</div>
+
+									<%= line_chart @matches.map{ |m| [m.matchId, m.mdScore]}, discrete: true, label: "md Score", xtitle: "Match Ids", ytitle: "md Score ", id: "champ_chart" %>
+
+
+								</div>
+
+
+			      <div class="control-group">
+			        <label class="control-label">Instance Name</label>
+			        </div>
+			      </div>
+
+			        <div class="tab-pane" id="stat_averages">
+			        content 0
+			        </div>
+
+
+			        <div class="tab-pane" id="champion_info">
+			        content 1
+			       </div>
 			</div>
-		</div>
-	</div>
+
 	<br>
 	<br>
 	<br>
