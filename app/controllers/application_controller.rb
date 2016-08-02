@@ -159,8 +159,6 @@ class ApplicationController < ActionController::Base
     end
 
     def self.create_match(summonerId, championId, region, summonerName, id)
-      puts "PARAMS___________________"
-      puts summonerId, championId, region, summonerName, id
       champion = Champion.find_by(:championId => championId)
       last_known_match = Match.where(:summoner_id => id, :champion_id => champion.id).order('timestamp desc').first
       if last_known_match != nil

@@ -187,6 +187,7 @@ DEPENDENCIES
   jquery-rails
   json
   paperclip (~> 4.2)
+
   pg
   rails (= 4.2.5.1)
   rails_12factor
