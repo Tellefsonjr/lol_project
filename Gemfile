@@ -34,6 +34,8 @@ gem 'bcrypt', '~> 3.1.9'
 gem 'hirb'
 # json
 gem 'json'
+# Paperclip for file uploads
+gem 'paperclip', "~> 4.2"
 
 # chartkick for graphs
 gem 'chartkick', '~> 1.5.2'
@@ -45,8 +47,7 @@ gem 'hightop'
 # gem 'tzinfo', platforms: [:x64_mingw, :mingw, :mswin]
 # gem 'tzinfo-data', platforms: [:x64_mingw, :mingw, :mswin]
 
-#paperclip for processing images
-gem 'paperclip'
+
 
 gem 'active_median'
 
