@@ -98,6 +98,8 @@ class SummonersController < ApplicationController
 		puts "@CHAMPION_____________________________MASTERY"
 		puts @champion_mastery
 		@matches = Match.where(:summoner_id => @summoner.id).where(:champion_id => @champion.id)
+		puts "AVG__________________________KILLS"
+		puts @matches.average(:kills)
 		################### CAN WE STREAMLINE QUERIES???!?!?!??!?!? ##################
 
 	end

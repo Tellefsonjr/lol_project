@@ -5,8 +5,8 @@ class MatchesController < ApplicationController
   end
 
   def show
-    @match = Match.find_by(:matchId => params[:id])
-    @champion = Champion.find_by(:championId => @match.championId)
+    @match = Match.includes(:champions).find_by(:matchId => params[:id])
+    @champion = Champion.find_by(:championId => @match.champion.championId)
     @summoner = Summoner.find(@match.summoner_id)
     @personal_best_gold = Match.where(:summoner_id => @match.summoner_id, :championId => @match.championId).order(goldEarned: :desc).first
     @pb_totalHeal = Match.where(:summoner_id => @match.summoner_id, :championId => @match.championId).order(totalHeal: :desc).first
