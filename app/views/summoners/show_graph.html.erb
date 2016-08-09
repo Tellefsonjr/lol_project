@@ -40,7 +40,7 @@
 							<div class="col-md-4">
 									<h4>
 										<% if @champion_mastery.chestGranted == 'true' %>
-										<img class="img img-responsive" src="/images/chest.png" alt="" id="chest">
+										<img class="img img-responsive" src="/images/chest.png" id="chest">
 										<% else %>
 										<img class="img img-responsive" src="/images/chest.png" alt="" id="noChest">
 										<% end %>
@@ -136,33 +136,36 @@
 											<div class="col-md-5">
 												<h3 class="page-header">Combat:</h3>
 												<div class="col-md-6 text-left">
-													<h4>K / D / A: <span class="pull-right"><%= @matches.average(:kills) %> / <%= @matches.average(:deaths) %> / <%= @matches.average(:assists) %></span></h4>
-													<h4>Double Kills:<span class="pull-right"><%= @matches.average(:doubleKills) %></span></h4>
-													<h4>Triple Kills:<span class="pull-right"> <%= @matches.average(:tripleKills) %></span></h4>
-													<h4>Quadra Kills:<span class="pull-right"> <%= @matches.average(:quadraKills) %></span></h4>
-													<h4>Penta Kills:<span class="pull-right"> <%= @matches.average(:pentaKills) %></span></h4>
+
+													<h4>K / D / A: <span class="pull-right"><%= @matches.average("kills") %> / <%= @matches.average("deaths") %> / <%= @matches.average(:assists) %></span></h4>
+													<h4>Double Kills:<span class="pull-right"> ><%= @matches.average('doubleKills').to_i %></span></h4>
+													<h4>Triple Kills:<span class="pull-right"> ><%= @matches.average('tripleKills').to_i %></span></h4>
+													<h4>Quadra Kills:<span class="pull-right"> ><%= @matches.average('quadraKills').to_i %></span></h4>
+													<h4>Penta Kills:<span class="pull-right"> ><%= @matches.average('pentaKills').to_i %></span></h4>
 												</div>
 												<div class="col-md-6 text-left">
-													<h4>Total Dmg: <span class="pull-right"><%= @matches.average(:totalDamage) %></span></h4>
-													<h4>Magic Dmg: <span class="pull-right"><%= @matches.average(:magicDamage) %></span></h4>
-													<h4>Physical Dmg:<span class="pull-right"> <%= @matches.average(:physicalDamage) %></span></h4>
+													<h4>Total Dmg: <span class="pull-right"><%= @matches.average(:totalDamage).to_i %></span></h4>
+													<h4>Magic Dmg: <span class="pull-right"><%= @matches.average(:magicDamage).to_i %></span></h4>
+													<h4>Physical Dmg:<span class="pull-right"> <%= @matches.average(:physicalDamage).to_i %></span></h4>
 												</div>
 
 											</div>
 											<div class="col-md-4 text-left">
 												<h3 class="page-header text-center">Support:</h3>
-												<h4>Total Healed: <span class="pull-right"><%= @matches.average(:totalHeal) %></span></h4>
-												<h4>Damage Taken: <span class="pull-right"><%= @matches.average(:damageTaken) %></span></h4>
-												<h4>Crowd Control Dealt: <span class="pull-right"><%= @matches.average(:totalCcDealt) %></span></h4>
-												<h4>Wards Placed: <span class="pull-right"><%= @matches.average(:wardsPlaced) %></span></h4>
-												<h4>Assists: <span class="pull-right"><%= @matches.average(:assists) %></span></h4>
+
+												<h4>Total Healed: <span class="pull-right"><%= @matches.average(:totalHeal).to_i %></span></h4>
+												<h4>Damage Taken: <span class="pull-right"><%= @matches.average(:damageTaken).to_i %></span></h4>
+												<h4>Crowd Control Dealt: <span class="pull-right"><%= @matches.average(:totalCcDealt).to_i %></span></h4>
+												<h4>Wards Placed: <span class="pull-right"><%= @matches.average(:wardsPlaced).to_i %></span></h4>
+												<h4>Assists: <span class="pull-right"><%= @matches.average(:assists).to_i %></span></h4>
 
 											</div>
 											<div class="col-md-3 text-left">
 												<h3 class="page-header text-center">Gold:</h3>
-												<h4>Gold Earned:<span class="pull-right"> <%= @matches.average(:goldEarned) %></span></h4>
-												<h4>Creep Score:<span class="pull-right"> <%= @matches.average(:cs) %></span></h4>
-												<h4>Jungle CS:<span class="pull-right"> <%= @matches.average(:jungleCs) %></span></h4>
+
+												<h4>Gold Earned:<span class="pull-right"> <%= @matches.average(:goldEarned).to_i %></span></h4>
+												<h4>Creep Score:<span class="pull-right"> <%= @matches.average(:cs).to_i %></span></h4>
+												<h4>Jungle CS:<span class="pull-right"> <%= @matches.average(:jungleCs).to_i %></span></h4>
 											</div>
 										</div>
 				        	</div>
@@ -170,12 +173,15 @@
 
 
 				        <div class="tab-pane" id="champion_info">
-				        content 1
+									<p class="white">
+										<%= sanitize @champion.lore %>
+									</p>
+
 				       </div>
 				</div>
-			</div> <!-- End of Main Div, Champion Stats, Match History, Etc.  -->
 
-
+			</div>
+		</div> <!-- End of Main Div, Champion Stats, Match History, Etc.  -->
 	</div> <!-- End of row -->
 	<br>
 	<br>

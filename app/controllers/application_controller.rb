@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   class Riot
     def self.get_all_champions(params)
       url = self.get_static_url
-      params = { champData: 'tags' }
+      params = { champData: 'all' }
       params = self.get_params(params)
       self.http_get(url, params)
     end
@@ -116,7 +116,7 @@ class ApplicationController < ActionController::Base
     end
 
     def self.get_api_key
-      ENV["LOL_SECRET"]
+      ENV['LOL_SECRET']
     end
   end
 
