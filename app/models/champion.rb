@@ -1,3 +1,5 @@
 class Champion < ActiveRecord::Base
-  belongs_to :champ
+  has_many :champs
+
+
 end

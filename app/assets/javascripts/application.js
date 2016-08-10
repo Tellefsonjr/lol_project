@@ -79,7 +79,8 @@ $(document).ready(function (){
               console.log("CHAMPION____ID:", champion_id);
               var imgHeight = document.getElementById("img_"+champion_id).clientHeight;
               var selected = $(this).index();
-                var name_offset = 360;
+              var name_offset = ($(this).height() - document.getElementById("splash_container").clientHeight) / 2;
+              console.log("NAME_OFFSET", name_offset);
               var offset = (imgHeight - document.getElementById("splash_container").clientHeight) / 2;
               $('.active').removeClass('active');
               $(this).addClass('active');
@@ -90,7 +91,7 @@ $(document).ready(function (){
                 $(this).removeClass('animated pulse');
               });;
               // $('#name_container ul').scrollTo(document.getElementById(selected), 100);
-              $('#name_container .scroll').scrollTo($('#name_container li.'+champ_name), 100, {offset: -name_offset});
+              $('#name_container .scroll').scrollTo($('#name_container li.'+champ_name), 100, {offset: name_offset});
               show_stats(champion_id);
               return false;
             });

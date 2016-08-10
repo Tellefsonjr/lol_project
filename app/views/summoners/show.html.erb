@@ -1,8 +1,8 @@
 
 <div class="container container-fluid row" style="width:100%; background-color:#aba7a7; margin-top:-18px;">
-  <div class="col-lg-6" style="padding-left:0px;">
+  <div class="col-lg-6 col-md-6" style="padding-left:0px;">
       <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-9 col-sm-9">
         <img class="pull-left" height="94px" width="94px" src="<%= @summoner['icon'] %>" />
         <h1 style="margin:0px;"><%= @summoner['summonerName'] %><small> Lvl <%= @summoner["summonerLevel"] %></small></h1>
         <h3 style="margin: 0px;">Mastery Score: <small><%= @champion_masteries.map {|s| s['championLevel']}.reduce(0, :+) %></small></h3>
@@ -25,7 +25,7 @@
         </form>
         <% end %>
         </div>
-        <div class="col-lg-3" style="padding-left:0px;"> <!-- Top champion -->
+        <div class="col-lg-3 col-sm-3" style="padding-left:0px;"> <!-- Top champion -->
           <form class="form-inline" action="/matches/create" method="post">
             <h4 style="margin-top:0px;">Top Champion:
             <div class="thumb" data-placement="bottom" data-toggle="popover" id="top_champ" data-container="body" data-placement="top" type="button" data-html="true" title="<%= @top_champion.champion.name %>" data-content="Current Level: <%= @top_champion.championLevel %> <br> Total Pts: <%= @top_champion.current_points %> <br> Points Until Next Level: <%= @top_champion.championPointsUntilNextLevel %> <br> Tokens Earned: <%= @top_champion.tokensEarned %> <br> Chest Earned: <% if @top_champion.chestGranted == 'true' %> Yes <% else %> No <% end %> <br> Last Played: <%= DateTime.strptime((@top_champion.lastPlayTime).to_s,'%s').strftime('%m/%d/%y') %>">
@@ -76,7 +76,7 @@
         </div>
     </div> <!-- end of left-div -->
 
-    <div class="col-lg-6" id="dex_container">
+    <div class="col-lg-6 col-md-6" id="dex_container">
       <div class="row">
         <div class="col-xs-12 text-center" id="up_arw">
           <a href="#" class="text-center arrow"><span class="fa fa-caret-up fa-4x"></span></a>
@@ -85,46 +85,47 @@
         <%= render 'shared/championsearch' %>
         <div class="col-xs-8 no-scroll"  id="splash_container">
           <ul>
-            <% @champion_list.each do |key, value| %>
+            <% @champions.each do |champion| %>
             <!-- key is supports/etc -->
             <!-- value is the mastery object -->
-            <% value[:Mastered].each do |this| %>
-            <li class="<%= this.champion.name.delete(' ') %>"><div id="toolTip">
-                <img class="img img-responsive mastered" src="<%= this.champion.splash %>" id="img_<%= this.champion.id %>">
+            <% if @summoner.champions.exists?(champion) %>
+            <% mastery = @champion_masteries.find_by(:champion_id => champion.id) %>
+
+            <li class="<%= champion.name.delete(' ') %>"><div id="toolTip">
+                <img class="img img-responsive mastered" src="<%= champion.splash %>" id="img_<%= champion.id %>">
                 <div id="tail2"></div>
                 <div class="hidden">
-                  <div id="<%= this.champion.id %>_stats"> <!-- this div gets displayed on left when champ selected -->
+                  <div id="<%= champion.id %>_stats"> <!-- this div gets displayed on left when champ selected -->
                     <div class="row">
                       <div class="col-xs-12">
                         <div class="layer_container">
-                          <img class="img img-responsive layered_icon" height="80px" width="80px" src="<%= this.champion.icon %>" alt="" />
-                          <img class="img img-responsive layered_border" height="110px" width="100px" src="/images/Champion_mastery_border_<%= this.championLevel %>.png" alt="" />
+                          <img class="img img-responsive layered_icon" height="80px" width="80px" src="<%= champion.icon %>" alt="" />
+                          <img class="img img-responsive layered_border" height="110px" width="100px" src="/images/Champion_mastery_border_<%= mastery.championLevel %>.png" alt="" />
                         </div>
-                        <h4 class="page-header text-left"><%= this.champion.name %> <small>Type: <%= this.champion.tag %></small></h4>
+                        <h4 class="page-header text-left"><%= champion.name %> <small>Type: <%= champion.tag %></small></h4>
                       </div>
                     </div>
-                    Current Level: <%= this.championLevel %> <br> Total Pts: <%= this.current_points %> <br> Points Until Next Level: <%= this.championPointsUntilNextLevel %> <br> Tokens Earned: <%= this.tokensEarned %> <br> Chest Earned: <% if this.chestGranted == 'true' %> Yes <% else %> No <% end %> <br> Last Played: <%= DateTime.strptime((this.lastPlayTime).to_s,'%s').strftime('%m/%d/%y') %>
+                    Current Level: <%= mastery.championLevel %> <br> Total Pts: <%= mastery.current_points %> <br> Points Until Next Level: <%= mastery.championPointsUntilNextLevel %> <br> Tokens Earned: <%= mastery.tokensEarned %> <br> Chest Earned: <% if mastery.chestGranted == 'true' %> Yes <% else %> No <% end %> <br> Last Played: <%= DateTime.strptime((mastery.lastPlayTime).to_s,'%s').strftime('%m/%d/%y') %>
                   </div>
                 </div>
             </div></li>
             <br>
-            <% end %>
-            <% value[:Unmastered].each do |this| %>
-            <li class="<%= this.name.delete(' ') %>"><div>
+            <% else %>
+            <li class="<%= champion.name.delete(' ') %>"><div>
               <div id="toolTip">
-                <img src="<%= this.splash %>" class="img img-responsive unmastered" id="img_<%= this.id %>">
+                <img src="<%= champion.splash %>" class="img img-responsive unmastered" id="img_<%= champion.id %>">
                 <h4 class="text-center unmastered_mark"><span class="fa fa-question-circle-o fa-5x"></span>
-                  <br>Sorry, no games played on <%= this.name %> yet.</h4>
+                  <br>Sorry, no games played on <%= champion.name %> yet.</h4>
                 <br>
                 <div id="tail2"></div>
                 <div class="hidden">
-                  <div id="<%= this.id %>_stats"> <!-- this div gets displayed on left when champ selected -->
+                  <div id="<%= champion.id %>_stats"> <!-- champion div gets displayed on left when champ selected -->
                     <div class="row">
                       <div class="col-xs-12">
                         <div class="layer_container">
-                          <img class="img img-responsive layered_icon" height="80px" width="80px" src="<%= this.icon %>" alt="" />
+                          <img class="img img-responsive layered_icon" height="80px" width="80px" src="<%= champion.icon %>" alt="" />
                         </div>
-                        <h4 class="page-header text-left"><%= this.name %> <small>Type: <%= this.tag %></small></h4>
+                        <h4 class="page-header text-left"><%= champion.name %> <small>Type: <%= champion.tag %></small></h4>
                       </div>
                     </div>
                     Current Level:  ???
@@ -146,19 +147,19 @@
           <ul class="scroll">
 
 
-            <% @champion_list.each do |key, value| %>
+            <% @champions.each do |champion| %>
 
-                        <!-- key is supports/etc -->
+                        <!-- key is supports/tanks/etc -->
                         <!-- value is the mastery object -->
-                        <% value[:Mastered].each do |this| %>
-                          <li class="text-left mastered_text <%= this.champion.name.delete(' ') %>" value="<%= this.champion.id %>" id="id_<%= this.champion.id %>">
-                            <h3><a href=""><small> No<%= this.champion.id %></small> <span><%= this.champion.name %></span></a><small>
-                              <img class="img" src="/images/Champion_mastery_tier_<%= this.championLevel %>.png" alt="" height="35px" width="35px" /></small>
+                        <% if @summoner.champions.exists?(champion) %>
+                          <% mastery = @champion_masteries.find_by(:champion_id => champion.id) %>
+                          <li class="text-left mastered_text <%= champion.name.delete(' ') %>" value="<%= champion.id %>" id="id_<%= champion.id %>">
+                            <h3><a href=""><small> No<%= champion.id %></small> <span><%= champion.name %></span></a><small>
+                              <img class="img" src="/images/Champion_mastery_tier_<%= mastery.championLevel %>.png" alt="" height="35px" width="35px" /></small>
                             </h3>
                           </li>
-                        <% end %>
-                        <% value[:Unmastered].each do |this| %>
-                            <li class="text-left <%= this.name.delete(' ') %>" value="<%= this.id %>" id="id_<%= this.id %>"><a href=""> <h3><small>No<%= this.id %></small> <span><%= this.name %></span></a></h3></li>
+                        <% else %>
+                            <li class="text-left <%= champion.name.delete(' ') %>" value="<%= champion.id %>" id="id_<%= champion.id %>"><a href=""> <h3><small>No<%= champion.id %></small> <span><%= champion.name %></span></a></h3></li>
                         <% end %>
                         <% end %>
             </select>
@@ -170,7 +171,6 @@
     </div>
 
 </div> <!-- MasteryDex Div -->
-
 
 </div> <!-- container-fluid -->
 <script>

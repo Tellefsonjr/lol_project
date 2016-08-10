@@ -7,7 +7,7 @@ class SummonersController < ApplicationController
 		end
 		if Champion.all.count < 130
 			all_champions = Riot.get_all_champions(params)
-			all_champions = all_champions['data']
+			all_champions = all_champions['data'].sort{|a,b| a[1]['name']<=>b[1]['name']}
 			all_champions.each do |this|
 				tag = this[1]["tags"][0].to_s
 				Champion.create(championId: this[1]["id"], name: this[1]["name"], title: this[1]["title"], icon: "http://ddragon.leagueoflegends.com/cdn/6.15.1/img/champion/"+this[1]['key']+".png", splash: "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"+this[1]['key']+"_0.jpg", tag: tag, lore: this[1]["lore"])
@@ -38,11 +38,10 @@ class SummonersController < ApplicationController
 
 	def show
 		################### CAN WE STREAMLINE QUERIES???!?!?!??!?!? ##################
-		@champions = Champion.all
+		@champions = Champion.all.order(name: :asc)
 		@summoner = Summoner.find_by(:summonerName => params[:summonerName], :region => params[:region])
 		@champion_masteries = @summoner.champion_masteries.all
 		@top_champion = @champion_masteries.includes(:champion).order(current_points: :desc).first
-		@test_query = @summoner.champion_masteries.includes(:champions)
 		@favorites = Favorite.where(:summoner_id => @summoner.id)
 		################### CAN WE STREAMLINE QUERIES???!?!?!??!?!? ##################
 
@@ -87,7 +86,7 @@ class SummonersController < ApplicationController
 										}
 
 			@champion_list = @champion_list.sort_by { |key, value| value[:Mastered].count}.reverse
-
+			puts "CHAMP_LIST_____________"
 	    # Loop through all 130 champions via the @champions (== Champion.all) variable and compare all 130 against each of the heroes in @champion_masteries ( == ChampionMastery.where(summoner_id: params[:id]))
 	end
 

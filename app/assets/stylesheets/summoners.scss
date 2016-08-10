@@ -22,7 +22,7 @@ body{
 }
 #splash_container{
   position: relative;
-  max-height: 760px;
+  max-height: 500px;
   padding-right:30px;
   overflow-x: visible;
   overflow-y: hidden;
@@ -46,7 +46,7 @@ body{
     position: relative;
   }
   #name_container{
-    max-height: 760px;
+    max-height: 500px;
   }
 #name_container ul{
   margin-top: auto;
@@ -54,7 +54,7 @@ body{
   width: 100%;
   padding-left:5px;
   text-decoration: none;
-  max-height: 760px;
+  max-height: 500px;
   text-align: center;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -227,8 +227,8 @@ a:focus{
 #searchButton, #sortButton{
   border-radius: 75px;
   position: absolute;
-  left: 7%;
-  bottom: 7%;
+  left: 15px;
+  bottom: 60px;
   padding: 0px;
   width: 60px;
   height: 60px;
@@ -242,8 +242,7 @@ a:focus{
   -o-transition: opacity .3s ease-out;
 }
 #sortButton{
-  bottom: 13%;
-  left: 1%;
+  left: 85px;
 
 }
 #searchButton:hover, #sortButton:hover{
