@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include PublicActivity::Common
+
   has_secure_password
   belongs_to :summoner
   has_many :favorites
@@ -27,6 +29,7 @@ class User < ActiveRecord::Base
 	validates :password, confirmation: true
 
 	before_save do
+    self.avatar = "https://thesocietypages.org/socimages/files/2009/05/vimeo.jpg"
     self.name.downcase!
 		self.email.downcase!
 	end
@@ -34,6 +37,7 @@ class User < ActiveRecord::Base
   # Follows a user.
  def follow(other_user)
    active_relationships.create(followed_id: other_user.id)
+   self.create_activity :create, owner: self, recipient: other_user
  end
 
  # Unfollows a user.

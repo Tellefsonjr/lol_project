@@ -67,20 +67,15 @@
 
       	<div class="">
 
-	      	<h3>MasteryDex Feed</h3>
+	      	<h3>MasteryDex Feed <small>(<%= @activities.count %>)</small></h3>
 	      	<p>What others are posting...</p>
 
-          <div class='well'>
-            <p>Name</p>
-            <p>Random Post</p>
-          </div>
 
-          <% if @user.posts.any? %>
-            <h3>Posts (<%= @user.posts.count %>)</h3>
-            <ol class="posts">
-              <%= render @posts %>
-            </ol>
-            <%= will_paginate @posts %>
+          <% @activities.each do |activity| %>
+            <div class="activity well">
+              <%= link_to activity.owner.name, activity.owner if activity.owner %>
+              <%= render_activity activity %>
+            </div>
           <% end %>
 
 	    	</div>

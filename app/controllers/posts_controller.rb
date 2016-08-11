@@ -14,8 +14,7 @@ class PostsController < ApplicationController
 
   end
   def show
-    @user = current_user
-    @posts = @user.posts.paginate(page: params[:page])
+
   end
 
 private

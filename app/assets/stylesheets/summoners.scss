@@ -22,7 +22,7 @@ body{
 }
 #splash_container{
   position: relative;
-  max-height: 500px;
+  max-height: 80vh;
   padding-right:30px;
   overflow-x: visible;
   overflow-y: hidden;
@@ -46,7 +46,7 @@ body{
     position: relative;
   }
   #name_container{
-    max-height: 500px;
+    max-height: 80vh;
   }
 #name_container ul{
   margin-top: auto;
@@ -54,7 +54,7 @@ body{
   width: 100%;
   padding-left:5px;
   text-decoration: none;
-  max-height: 500px;
+  max-height: 80vh;
   text-align: center;
   overflow-x: hidden;
   overflow-y: scroll;

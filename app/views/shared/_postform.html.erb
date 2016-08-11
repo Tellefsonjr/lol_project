@@ -13,12 +13,13 @@ aria-labelledby="postModalLabel" aria-hidden="true">
     </div>
     <div class="modal-body">
 
-      <form class="form-register" action ='' method =''>
-        <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
-        <input type='hidden' name='current_user.id' value='<%=  %>'>
-        <textarea class="form-control" rows="6" name="content" style="min-width: 100%"></textarea>
-        <button type='submit' class='btn btn-primary btn-md btn-block'><span class="fa fa-share-square-o"></span> Post it!</button>
-      </form>
+      <%= form_for(@post) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+        <div class="field">
+          <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+        </div>
+        <%= f.submit "Post", class: "btn btn-primary" %>
+      <% end %>
 
     </div>
     <div class="modal-footer">

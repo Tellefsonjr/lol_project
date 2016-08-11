@@ -19,7 +19,7 @@
 //= require bootstrap
 //= require jquery.scrollTo
 //= require bootstrap-list-filter.src
-$(document).ready(function (){
+$(document).on('page:change', function (){
             //initialize offsets to scroll to, also add first and last classes
             $("#splash_container li:eq(0) #tail2").addClass("animated fadeIn")
             $("#splash_container li:eq(0)").addClass("animated pulse").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",

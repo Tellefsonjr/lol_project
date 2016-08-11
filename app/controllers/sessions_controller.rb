@@ -2,7 +2,10 @@ class SessionsController < ApplicationController
 
   def index
     @user = current_user
+    @post = current_user.posts.build if logged_in?
     @posts = @user.posts.paginate(page: params[:page])
+    @activities = PublicActivity::Activity.order("created_at desc").where(owner_id: [current_user.id, current_user.following.ids], owner_type: "User")
+
 
   end
 

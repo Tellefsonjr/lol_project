@@ -47,7 +47,10 @@ gem 'hightop'
 #gem 'tzinfo', platforms: [:x64_mingw, :mingw, :mswin]
 #gem 'tzinfo-data', platforms: [:x64_mingw, :mingw, :mswin]
 
-
+# Public_Activity gem for notifications
+gem 'public_activity'
+# FriendlyId to Hide user and summoner ids
+gem 'friendly_id', '~> 5.1.0'
 # Pagination for posts
 gem 'will_paginate'
 

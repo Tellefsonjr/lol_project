@@ -1,0 +1,14 @@
+Posted
+
+<% if activity.trackable %>
+  <%= activity.trackable.content %>
+  <span class="fa-stack fa-lg fa-2x pull-right" style="color: rgba( 39, 88,107,1)">
+    <i class="fa fa-square-o fa-stack-2x"></i>
+    <i class="fa fa-pencil-square-o fa-stack-1x"></i>
+  </span>
+<% else %>
+  which has since been removed
+<% end %>
+<p>
+  Posted <%= time_ago_in_words(activity.trackable.created_at) %> ago.
+</p>

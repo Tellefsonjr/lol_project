@@ -1,0 +1,15 @@
+Added
+
+<% if activity.trackable %>
+  <%= link_to image_tag("#{activity.trackable.summoner.icon}", height:"40px", width:"40px" ) %> <%= activity.trackable.summoner.summonerName %>
+  to their Favorites!
+  <span class="fa-stack fa-lg fa-2x pull-right" style="color:rgba(170, 76, 57,1)">
+    <i class="fa fa-square-o fa-stack-2x"></i>
+    <i class="fa fa-heart fa-stack-1x"></i>
+  </span>
+<% else %>
+  which has since been removed
+<% end %>
+<p>
+  Favorited <%= time_ago_in_words(activity.trackable.created_at) %> ago.
+</p>
