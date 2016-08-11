@@ -1,6 +1,8 @@
 class Favorite < ActiveRecord::Base
-  include PublicActivity::Model
-  tracked owner: ->(controller, model) { controller && controller.current_user }
+  include PublicActivity::Common
   belongs_to :user
   belongs_to :summoner
+  after_save do
+    self.create_activity :create, owner: self.user, recipient: self.summoner
+  end
 end
