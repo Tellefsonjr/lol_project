@@ -15,7 +15,10 @@ jerico = User.create!(name: "Jerico", email: "jericomanalo@gmail.com",
 
 timmey.follow(clark)
 timmey.follow(jerico)
+Post.create!(title: "Timmey's first post", content:"Aaaaaaye dooods", user_id: timmey.id)
 clark.follow(timmey)
 clark.follow(jerico)
+Post.create!(title: "Clark's first post", content:"Sup fooools", user_id: timmey.id)
 jerico.follow(timmey)
 jerico.follow(clark)
+Post.create!(title: "Jerico's first post", content:"Suhh dooohs", user_id: timmey.id)
