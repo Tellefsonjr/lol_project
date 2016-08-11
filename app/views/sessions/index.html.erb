@@ -24,7 +24,7 @@
                   <div class="row">
                     <div class="col-md-12">
                         <a href="/users/<%= this.id %>"><button type="button" class="btn btn-default" id="list_btn">
-                          <img class="img img-responsive pull-left" src="https://avatars1.githubusercontent.com/u/15368821?v=3&s=400" height="40px" width="40px" alt="example img" />
+                          <img class="img img-responsive pull-left" src="<%= this.avatar %>" height="40px" width="40px" alt="example img" />
                             <h4 class="pull-left" style="text-align:middle"> <%= this.name %></h4>
                         </button></a>
                     </div>
@@ -43,7 +43,7 @@
                   <div class="row">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default" id="list_btn">
-                          <img class="img img-responsive pull-left" src="https://avatars1.githubusercontent.com/u/15368821?v=3&s=400" height="40px" width="40px" alt="example img" />
+                          <img class="img img-responsive pull-left" src="<%=this.avatar%>" height="40px" width="40px" alt="example img" />
                             <h4 class="pull-left" style="text-align:middle"> <%= this.name %></h4>
                         </button>
                     </div>
@@ -73,7 +73,7 @@
 
           <% @activities.each do |activity| %>
             <div class="activity well">
-              <%= link_to activity.owner.name, activity.owner if activity.owner %>
+              <%= link_to image_tag("#{activity.owner.avatar}", height:"60px", width:"60px") + "#{activity.owner.name}", activity.owner, :style=>"text-decoration: none; color:#333" if activity.owner %>
               <%= render_activity activity %>
             </div>
           <% end %>

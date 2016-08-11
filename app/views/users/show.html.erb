@@ -4,7 +4,7 @@
   <div class="row content">
     <div class="col-sm-2 sidenav">
       <div class="well" id="summoner_banner">
-        <img class="img img-responsive" src="https://avatars1.githubusercontent.com/u/15368821?v=3&s=400" alt="example img" height="250px" width="250px" />
+        <img class="img img-responsive" src="<%= @user.avatar %>" alt="example img" height="250px" width="250px" />
         <!-- <div class="stats">
           <a href="<%= following_user_path(@user) %>">
             <strong id="following" class="stat">
@@ -53,7 +53,7 @@
                   <div class="row">
                     <div class="col-md-12">
                         <a href="/users/<%= this.id %>"><button type="button" class="btn btn-default" id="list_btn">
-                          <img class="img img-responsive pull-left" src="https://avatars1.githubusercontent.com/u/15368821?v=3&s=400" height="40px" width="40px" alt="example img" />
+                          <img class="img img-responsive pull-left" src="<%= this.avatar %>" height="40px" width="40px" alt="example img" />
                             <h4 class="pull-left" style="text-align:middle"> <%= this.name %></h4>
                         </button></a>
                     </div>
@@ -72,7 +72,7 @@
                   <div class="row">
                     <div class="col-md-12">
                         <a href="/users/<%= this.id %>"><button type="button" class="btn btn-default" id="list_btn">
-                          <img class="img img-responsive pull-left" src="https://avatars1.githubusercontent.com/u/15368821?v=3&s=400" height="40px" width="40px" alt="example img" />
+                          <img class="img img-responsive pull-left" src="<%= this.avatar %>" height="40px" width="40px" alt="example img" />
                             <h4 class="pull-left" style="text-align:middle"> <%= this.name %></h4>
                         </button></a>
                     </div>
