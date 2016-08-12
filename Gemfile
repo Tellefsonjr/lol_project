@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 #heroku plugins static assests and logging on heroku
 gem 'rails_12factor', group: :production
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '~> 5.0'
 # Use sqlite3 as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
@@ -45,12 +45,15 @@ gem 'groupdate'
 gem 'hightop'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 #gem 'tzinfo', platforms: [:x64_mingw, :mingw, :mswin]
-#gem 'tzinfo-data', platforms: [:x64_mingw, :mingw, :mswin]
+#em 'tzinfo-data', platforms: [:x64_mingw, :mingw, :mswin]
 
 # Public_Activity gem for notifications
 gem 'public_activity'
 # FriendlyId to Hide user and summoner ids
 gem 'friendly_id', '~> 5.1.0'
+#jQuery-turbolinks to stop turbolinks from refreshing page constantly
+gem 'jquery-turbolinks'
+
 # Pagination for posts
 gem 'will_paginate'
 

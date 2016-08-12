@@ -33,10 +33,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(session[:user_id])
-    if @user.update_attributes(update_params)
+    @current_user = User.find(session[:user_id])
+    if @current_user.update(user_params)
+      @current_user.avatar = (user_params[:avatar])
       redirect_to '/dashboard'
     else
+      puts "________________DIDNT UPDATE __________________"
       redirect_to :back
     end
   end
@@ -49,7 +51,7 @@ class UsersController < ApplicationController
       user_id: @current_user.id,
       summoner_id: summoner.id
     )
-    redirect_to "/summoners/" + summoner.summonerName + "/" + summoner.region
+    redirect_to summoner
   end
   def unfavorite
     current_user
@@ -60,15 +62,12 @@ class UsersController < ApplicationController
       user_id: @current_user.id,
       summoner_id: summoner.id
     ).destroy
-    redirect_to "/summoners/" + summoner.summonerName + "/" + summoner.region
+    redirect_to summoner
   end
 
   private
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :bio, :avatar)
   end
 
-  def update_params
-    params.require(:user).permit(:name, :email)
-  end
 end

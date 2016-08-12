@@ -1,14 +1,17 @@
-Followed
+<span class="fa-stack fa-lg fa-2x pull-right" style="color:rgba(170,137, 57,1)">
+  <i class="fa fa-square-o fa-stack-2x"></i>
+  <i class="fa fa-user-plus fa-stack-1x"></i>
+</span>
+<h3>
+  Followed
+</h3>
+<hr>
 
 <% if activity.trackable %>
-  <%= link_to image_tag("#{activity.recipient.avatar}", height:"40px", width:"40px" ) %> <%= activity.recipient.name %>
-  <span class="fa-stack fa-lg fa-2x pull-right" style="color:rgba(170,137, 57,1)">
-    <i class="fa fa-square-o fa-stack-2x"></i>
-    <i class="fa fa-user-plus fa-stack-1x"></i>
-  </span>
+  <h4>Started following <%= link_to image_tag("#{activity.recipient.avatar}", height:"40px", width:"40px" ), activity.recipient %> <%= activity.recipient.name %>!</h4>
 <% else %>
   which has since been removed
 <% end %>
 <p>
-  Followed <%= time_ago_in_words(activity.trackable.created_at) %> ago.
+  <%= time_ago_in_words(activity.created_at) %> ago.
 </p>

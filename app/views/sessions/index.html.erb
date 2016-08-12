@@ -5,7 +5,7 @@
   <div class="row content">
     <div class="col-sm-2 sidenav">
       <div class="well" id="summoner_banner">
-        <img class="img img-responsive" src="https://thesocietypages.org/socimages/files/2009/05/vimeo.jpg" alt="example img" height="250px" width="250px" />
+        <img class="img img-responsive" src="<%= @current_user.avatar %>" alt="example img" height="250px" width="250px" />
       </div>
       <ul class="nav nav-pills" id="tabContent">
               <li class="active"><a href="#following" data-toggle="tab">Following <span class="badge"><%= @current_user.following.count %></span></a></li>
@@ -72,10 +72,25 @@
 
 
           <% @activities.each do |activity| %>
-            <div class="activity well">
-              <%= link_to image_tag("#{activity.owner.avatar}", height:"60px", width:"60px") + "#{activity.owner.name}", activity.owner, :style=>"text-decoration: none; color:#333" if activity.owner %>
+            <div class="activity well row">
+              <div class="col-sm-3">
+
+              <% if activity.owner_type == "User" %>
+                <h2>
+                  <%= link_to image_tag("#{activity.owner.avatar}", height:"60px", width:"60px") + "#{activity.owner.name}", activity.owner, :style=>"text-decoration: none; color:#333" if activity.owner %>
+                </h2>
+              <% else %>
+                  <h2>
+                    <%= link_to image_tag("#{activity.owner.icon}", height:"60px", width:"60px") + "#{activity.owner.name}", activity.owner, :style=>"text-decoration: none; color:#333" if activity.owner %>
+                  </h2>
+
+              <% end %>
+            </div>
+            <div class="col-sm-9 text-left">
               <%= render_activity activity %>
             </div>
+
+          </div>
           <% end %>
 
 	    	</div>
@@ -91,10 +106,10 @@
               <li>
 
                 <div class="btn-group" style="width:100%; text-align:middle;">
-                  <a href="/summoners/<%= favorite.summonerName %>/<%= favorite.region %>">
+                  <a href="/summoners/<%= favorite.name %>/<%= favorite.region %>">
                     <button type="button" class="btn btn-default btn-block">
                     <img class="img img-responsive pull-left" src="<%= favorite.icon %>" height="40px" width="40px" alt="" />
-                      <h4 class="pull-left" style="text-align:middle"><%= favorite.summonerName %></h4>
+                      <h4 class="pull-left" style="text-align:middle"><%= favorite.name %></h4>
                   </button>
                   </a>
                 </div>

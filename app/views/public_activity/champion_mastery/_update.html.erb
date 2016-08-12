@@ -1,0 +1,17 @@
+<span class="fa-stack fa-lg fa-2x pull-right" style="color:rgba(170, 76, 57,1)">
+  <i class="fa fa-square-o fa-stack-2x"></i>
+  <i class="fa fa-level-up fa-stack-1x"></i>
+</span>
+<h3>
+  Updated
+</h3>
+<hr>
+<% if activity.trackable %>
+<% updatedColumn = activity.parameters.keys.first %>
+ <h4><%= activity.trackable.summoner.name %> updated their <%= image_tag("#{activity.trackable.champion.icon}", height:"35px", width:"35px") + activity.trackable.champion.name %>'s <%= updatedColumn %> was <%= activity.parameters[updatedColumn].try(:first) %> and is now <%= activity.parameters[updatedColumn].try(:last) %>!</h4>
+<% else %>
+  which has since been removed
+<% end %>
+<p>
+  Updated <%= time_ago_in_words(activity.created_at) %> ago.
+</p>

@@ -4,8 +4,9 @@ class SessionsController < ApplicationController
     @user = current_user
     @post = current_user.posts.build if logged_in?
     @posts = @user.posts.paginate(page: params[:page])
-    @activities = PublicActivity::Activity.order("created_at desc").where(owner_id: [current_user.id, current_user.following.ids], owner_type: "User")
-
+    @activities = PublicActivity::Activity.order("created_at desc").where(:owner_id => current_user.following_ids, owner_type: "User")
+    .or(PublicActivity::Activity.order("created_at desc").where(owner_id: [current_user.summoners.ids], owner_type: "Summoner"))
+    .or(PublicActivity::Activity.order("created_at desc").where(:owner_id => current_user.id, owner_type: "User"))
 
   end
 

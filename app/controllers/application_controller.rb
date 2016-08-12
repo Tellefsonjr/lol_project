@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
-  hide_action :current_user
 
 
   def logged_in?
@@ -34,8 +33,8 @@ class ApplicationController < ActionController::Base
       self.http_get(url, params)
     end
 
-    def self.get_summoner(region, summonerName, params = {})
-      url = self.get_summoner_url(region, summonerName)
+    def self.get_summoner(region, name, params = {})
+      url = self.get_summoner_url(region, name)
       params = self.get_params(params)
       self.http_get(url, params)
     end
@@ -101,8 +100,8 @@ class ApplicationController < ActionController::Base
       "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion"
     end
 
-    def self.get_summoner_url(region, summonerName)
-      "https://#{region}.api.pvp.net/api/lol/na/v1.4/summoner/by-name/#{summonerName}"
+    def self.get_summoner_url(region, name)
+      "https://#{region}.api.pvp.net/api/lol/na/v1.4/summoner/by-name/#{name}"
     end
 
     def self.get_match_url(region)
@@ -124,43 +123,7 @@ class ApplicationController < ActionController::Base
 
   class Md
 
-    def self.create_summoner(region, summonerName)
-      summoner = Riot.get_summoner(region, summonerName, {})
-      if summoner[summonerName]
-        Summoner.create(
-          summonerName: summonerName,
-          summonerId: summoner[summonerName]['id'],
-          region: region,
-          icon: "http://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/" + (summoner[summonerName]['profileIconId']).to_s + ".png",
-          summonerLevel: summoner[summonerName]['summonerLevel']
-        )
-      end
-    end
-
-    def self.create_champion_mastery(region, summonerId, id)
-      champion_masteries = Riot.get_champion_masteries(region, summonerId)
-      champion_masteries.each do |this|
-        champion = Champion.find_by(:championId => this['championId'])
-        lastPlayTime = DateTime.strptime(this['lastPlayTime'].to_s, '%Q')
-        new_mastery = ChampionMastery.create(
-          summoner_id: id,
-          champion_id: champion.id,
-          current_points: this['championPoints'],
-          championPointsSinceLastLevel: this['championPointsSinceLastLevel'],
-          championPointsUntilNextLevel: this['championPointsUntilNextLevel'],
-          tokensEarned: this['tokensEarned'],
-          championLevel: this['championLevel'],
-          chestGranted: (this['chestGranted']).to_s,
-          lastPlayTime: lastPlayTime
-        )
-        Champ.create(
-          champion_id: champion.id,
-          champion_mastery_id: new_mastery.id
-        )
-      end
-    end
-
-    def self.create_match(summonerId, championId, region, summonerName, id)
+    def self.create_match(summonerId, championId, region, name, id)
       champion = Champion.find_by(:championId => championId)
       last_known_match = Match.where(:summoner_id => id, :champion_id => champion.id).order('timestamp desc').first
       if last_known_match != nil
@@ -177,7 +140,7 @@ class ApplicationController < ActionController::Base
       end
       if matchlist["totalGames"] == 0
         flash[:error] = "Sorry, this Summoner currently has no matches played with this Champion for the 2016 Season."
-        redirect_to controller: "summoners", action: "show", summonerName: summonerName, region: region
+        redirect_to controller: "summoners", action: "show", name: name, region: region
       else
         matchlist["matches"].each do |match|
 

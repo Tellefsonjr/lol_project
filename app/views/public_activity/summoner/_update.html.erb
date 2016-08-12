@@ -1,0 +1,27 @@
+<span class="fa-stack fa-lg fa-2x pull-right" style="color:rgba(170, 76, 57,1)">
+  <i class="fa fa-square-o fa-stack-2x"></i>
+  <i class="fa fa-refresh fa-stack-1x"></i>
+</span>
+<h3>
+  Updated
+</h3>
+<hr>
+<% if activity.trackable %>
+<% updatedColumn = activity.parameters.keys.first %>
+ <h4><%= activity.trackable.name %> updated their <%= updatedColumn %>
+   was
+   <% if updatedColumn == "profileIconId" %>
+   <img src="<%= activity.parameters['icon'].try(:first) %>" height="40px" width="40px">
+
+   and is now
+
+   <img src="<%= activity.parameters['icon'].try(:last) %>" height="40px" width="40px">   
+
+   <% end %>
+   !</h4>
+<% else %>
+  which has since been removed
+<% end %>
+<p>
+  Updated <%= time_ago_in_words(activity.created_at) %> ago.
+</p>

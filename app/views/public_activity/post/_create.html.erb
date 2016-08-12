@@ -1,14 +1,16 @@
-Posted
-
+<span class="fa-stack fa-lg fa-2x pull-right" style="color: rgba( 39, 88,107,1)">
+  <i class="fa fa-square-o fa-stack-2x"></i>
+  <i class="fa fa-pencil-square-o fa-stack-1x"></i>
+</span>
+<h3>
+  Posted
+</h3>
+<hr>
 <% if activity.trackable %>
-  <%= activity.trackable.content %>
-  <span class="fa-stack fa-lg fa-2x pull-right" style="color: rgba( 39, 88,107,1)">
-    <i class="fa fa-square-o fa-stack-2x"></i>
-    <i class="fa fa-pencil-square-o fa-stack-1x"></i>
-  </span>
+  <h3><%= activity.trackable.content %></h3>
 <% else %>
   which has since been removed
 <% end %>
 <p>
-  Posted <%= time_ago_in_words(activity.trackable.created_at) %> ago.
+<%= time_ago_in_words(activity.created_at) %> ago.
 </p>

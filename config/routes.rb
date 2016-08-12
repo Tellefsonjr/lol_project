@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   #compare graphs with another user
   get 'summoners/:summonerName1/:region1/graph/:championId/compare/:summonerName2/:region2' => 'summoners#show_compare'
 
+  resources :summoners
   # ---------------- ChampionMastery Routes -------------------
   #create champion_masteries - if not in DB
   get 'champion_masteries/create' => 'champion_masteries#create'

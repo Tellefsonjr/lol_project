@@ -1,6 +1,6 @@
 class SummonersController < ApplicationController
 	def index
-		#session.clear
+		session.clear
 		current_user
 		if Summoner.count > 0
 			randomInt = rand(1...(Summoner.count))
@@ -11,36 +11,61 @@ class SummonersController < ApplicationController
 			all_champions = all_champions['data'].sort{|a,b| a[1]['name']<=>b[1]['name']}
 			all_champions.each do |this|
 				tag = this[1]["tags"][0].to_s
-				Champion.create(championId: this[1]["id"], name: this[1]["name"], title: this[1]["title"], icon: "http://ddragon.leagueoflegends.com/cdn/6.15.1/img/champion/"+this[1]['key']+".png", splash: "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"+this[1]['key']+"_0.jpg", tag: tag, lore: this[1]["lore"])
+				Champion.create(championId: this[1]["id"], name: this[1]["name"], title: this[1]["title"], icon: "http://ddragon.leagueoflegends.com/cdn/6.16.2/img/champion/"+this[1]['key']+".png", splash: "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"+this[1]['key']+"_0.jpg", tag: tag, lore: this[1]["lore"])
 			end
 		end
 	end
 
 	def search
-		@summoner = Summoner.find_by(:region => params[:summoner][:region], :summonerName => params[:summoner][:summonerName])
+		@summoner = Summoner.find_by(:region => params[:summoner][:region], :name => params[:summoner][:name])
 		if  @summoner != nil
-			redirect_to action: "show", summonerName: @summoner.summonerName, region: @summoner.region
+			update(@summoner)
 		else
 			create
 		end
 	end
 
 	def create
+		name = params[:summoner][:name]
 		region = params[:summoner][:region]
-		summonerName = params[:summoner][:summonerName]
-		if Md.create_summoner(region, summonerName)
-			@summoner = Summoner.find_by(:summonerName => summonerName, :region => region )
-      redirect_to controller: "champion_masteries", action: "create", region: @summoner.region, summonerId: @summoner.summonerId, id: @summoner.id, summonerName: @summoner.summonerName
+		summoner = Riot.get_summoner(region, name, {})
+		if summoner[name]
+			@summoner = Summoner.build_summoner(summoner[name], region)
+			if @summoner.save
+				redirect_to controller: "champion_masteries", action: "create", region: @summoner.region, summonerId: @summoner.summonerId, id: @summoner.id, name: @summoner.name
+			else
+				flash[:error] = "Sorry, there was a problem saving that summoner."
+				redirect_to '/'
+			end
     else
       flash[:error] = "Sorry, the Summoner you wish to search for does not exist in the Riot Games database, please try again."
       redirect_to '/'
     end
 	end
+	def update(summoner)
+		#Update Summoner in DB with current_summoner requested from Riot API,
 
+		puts "Checking if Summoner needs to be updated"
+		@summoner = Summoner.find(summoner.id)
+		#only if Summoner in DB updated recently
+		if @summoner.updated_recently?
+			current_summoner = Riot.get_summoner(summoner.region, summoner.name, {})
+			#custom Update query here to make sure we don't update DB with Riot SummonerId
+			 @summoner.update_summoner(current_summoner[@summoner.name], @summoner.region)
+			 champion_masteries = Riot.get_champion_masteries(summoner.region, summoner.summonerId, params = {})
+			 ChampionMastery.update_masteries(champion_masteries, summoner.id)
+			 #if changes in values, create activity to display in feed
+			 if @summoner.changed?
+					 @summoner.create_activity :update, owner: @summoner, parameters: @summoner.changes
+				 end
+		end
+		#regardless of update or changed values, we want to redirect back to summoner view
+		redirect_to @summoner
+	end
 	def show
 		################### CAN WE STREAMLINE QUERIES???!?!?!??!?!? ##################
 		@champions = Champion.all.order(name: :asc)
-		@summoner = Summoner.find_by(:summonerName => params[:summonerName], :region => params[:region])
+		@summoner = Summoner.find(params[:id])
 		@champion_masteries = @summoner.champion_masteries.all
 		@top_champion = @champion_masteries.includes(:champion).order(current_points: :desc).first
 		@favorites = Favorite.where(:summoner_id => @summoner.id)
@@ -108,16 +133,16 @@ class SummonersController < ApplicationController
 	def compare
 		@champion = Champion.find_by(:championId => params[:championId])
 		puts "IN COMPARE"
-		puts params[:summoner][:summonerName]
+		puts params[:summoner][:name]
 		puts params[:summoner][:region]
-		puts params[:summonerName]
+		puts params[:name]
 		puts params[:region]
-		summoner = Summoner.find_by(:summonerName => params[:summonerName], :region => params[:region])
-		compare_summoner = Summoner.find_by(:summonerName => params[:summoner][:summonerName], :region => params[:summoner][:region])
+		summoner = Summoner.find_by(:name => params[:name], :region => params[:region])
+		compare_summoner = Summoner.find_by(:name => params[:summoner][:name], :region => params[:summoner][:region])
 		match_search = Match.where(:champion_id => @champion.id).where(:summoner_id => [compare_summoner.id])
-		if summoner.summonerName != nil && compare_summoner != nil && match_search != nil
-				 redirect_to action: "show_compare", summonerName1: summoner.summonerName, region1: summoner.region, championId: params[:championId], summonerName2: compare_summoner.summonerName, region2: compare_summoner.region
-		elsif summoner.summonerName != nil && compare_summoner == nil
+		if summoner.name != nil && compare_summoner != nil && match_search != nil
+				 redirect_to action: "show_compare", name1: summoner.name, region1: summoner.region, championId: params[:championId], name2: compare_summoner.name, region2: compare_summoner.region
+		elsif summoner.name != nil && compare_summoner == nil
 			redirect_to action: "create"
 		else
 			 	redirect_to action: "show_graph", id: summoner.id, championId: params[:championId]
@@ -128,22 +153,22 @@ class SummonersController < ApplicationController
 
 	def show_compare
 		@champion = Champion.find_by(:championId => params[:championId])
-		@summoner = Summoner.find_by(:summonerName => params[:summonerName1], :region => params[:region1])
+		@summoner = Summoner.find_by(:name => params[:name1], :region => params[:region1])
 		@champion_mastery = ChampionMastery.where(:champion_id => @champion.id).where(:summoner_id => @summoner.id)
-		@compare_summoner = Summoner.find_by(:summonerName => params[:summonerName2], :region => params[:region2])
+		@compare_summoner = Summoner.find_by(:name => params[:name2], :region => params[:region2])
 		@compare_mastery = ChampionMastery.where(:summoner_id => @compare_summoner.id).where(:champion_id => @champion.id)
 		@matches = Match.where(:champion_id => @champion.id, :summoner_id => @summoner.id)
 		@compare_matches = Match.where(:champion_id => @champion.id, :summoner_id => @compare_summoner.id)
 		params[:championId] = @champion.championId
 		puts "COMPARE NAMESSSSSSSSSSSSSSSSSSSSSSSS"
-		puts @summoner.summonerName
-		puts @compare_summoner.summonerName
+		puts @summoner.name
+		puts @compare_summoner.name
 	end
 
 	private
 
 	def summoner_params
-		params.require(:summoner).permit(:region, :summonerName)
+		params.require(:summoner).permit(:region, :name, :icon, :summonerLevel)
 	end
 
 end

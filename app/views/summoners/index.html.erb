@@ -5,7 +5,7 @@
 			<h1 class='form-register-heading'>MasteryDex <small>*Some features still in progress.</small></h1>
 			<% if flash[:error] %>
 			<div class="alert alert-danger" role="alert">
-				<strong class="red"><%=h flash[:error] %></strong>
+				<strong class="red"><%= flash[:error] %></strong>
 			</div>
 			<% end %>
 			<form action='/summoners/search' class='form-inline' role="form" method='post'>
@@ -15,7 +15,7 @@
 	<div class="input-group">
 
 		<div class="form-group">
-			<input size="50" type='text' placeholder='Summoner Name' class='form-control' name='summoner[summonerName]' value=''  required>
+			<input size="50" type='text' placeholder='Summoner Name' class='form-control' name='summoner[name]' value=''  required>
 		</div>
 
 		<div class="form-group">
@@ -51,7 +51,7 @@
 				<% if @randomSummoner %>
 				<form action='/summoners/search' class='form-register' method='post'>
 					<input type='hidden' name="authenticity_token" value="<%= form_authenticity_token %>">
-					<input type='hidden' name="summoner[summonerName]" value="<%= @randomSummoner.summonerName %>">
+					<input type='hidden' name="summoner[name]" value="<%= @randomSummoner.name %>">
 					<input type='hidden' name="summoner[region]" value="<%= @randomSummoner.region %>">
 					<button type='submit' class='btn btn-primary btn-md btn-block'>Random Search</button>
 				</form>

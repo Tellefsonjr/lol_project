@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-lg-9 col-sm-9">
         <img class="pull-left" height="94px" width="94px" src="<%= @summoner['icon'] %>" />
-        <h1 style="margin:0px;"><%= @summoner['summonerName'] %><small> Lvl <%= @summoner["summonerLevel"] %></small></h1>
+        <h1 style="margin:0px;"><%= @summoner['name'] %><small> Lvl <%= @summoner["summonerLevel"] %></small></h1>
         <h3 style="margin: 0px;">Mastery Score: <small><%= @champion_masteries.map {|s| s['championLevel']}.reduce(0, :+) %></small></h3>
         <button class="btn btn-default pull-left inline btn-sm"><span class="badge"><%= @favorites.count %></span> favorites</button>
         <% if !current_user %>
@@ -32,7 +32,7 @@
             <input type="hidden" name="summonerId" value="<%= @summoner.summonerId %>">
             <input type="hidden" name="region" value="<%= @summoner.region %>">
             <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-            <input type="hidden" name="summonerName" value="<%= @summoner.summonerName %>">
+            <input type="hidden" name="name" value="<%= @summoner.name %>">
             <input type="hidden" name="id" value="<%= @summoner.id %>" >
             <!-- need to fix z-index of chest and only show IF player has earned a chest -->
             <% if @top_champion.chestGranted == 'true' %>
@@ -88,7 +88,7 @@
             <% @champions.each do |champion| %>
             <!-- key is supports/etc -->
             <!-- value is the mastery object -->
-            <% if @summoner.champions.exists?(champion) %>
+            <% if @summoner.champions.exists?(champion.id) %>
             <% mastery = @champion_masteries.find_by(:champion_id => champion.id) %>
 
             <li class="<%= champion.name.delete(' ') %>"><div id="toolTip">
@@ -151,15 +151,15 @@
 
                         <!-- key is supports/tanks/etc -->
                         <!-- value is the mastery object -->
-                        <% if @summoner.champions.exists?(champion) %>
+                        <% if @summoner.champions.exists?(champion.id) %>
                           <% mastery = @champion_masteries.find_by(:champion_id => champion.id) %>
                           <li class="text-left mastered_text <%= champion.name.delete(' ') %>" value="<%= champion.id %>" id="id_<%= champion.id %>">
-                            <h3><a href=""><small> No<%= champion.id %></small> <span><%= champion.name %></span></a><small>
+                            <h3><a><small> No<%= champion.id %></small> <span><%= champion.name %></span></a><small>
                               <img class="img" src="/images/Champion_mastery_tier_<%= mastery.championLevel %>.png" alt="" height="35px" width="35px" /></small>
                             </h3>
                           </li>
                         <% else %>
-                            <li class="text-left <%= champion.name.delete(' ') %>" value="<%= champion.id %>" id="id_<%= champion.id %>"><a href=""> <h3><small>No<%= champion.id %></small> <span><%= champion.name %></span></a></h3></li>
+                            <li class="text-left <%= champion.name.delete(' ') %>" value="<%= champion.id %>" id="id_<%= champion.id %>"><a> <h3><small>No<%= champion.id %></small> <span><%= champion.name %></span></a></h3></li>
                         <% end %>
                         <% end %>
             </select>

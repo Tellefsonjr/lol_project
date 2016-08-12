@@ -41,7 +41,7 @@
 																<div class="form-group">
 																		<input type='hidden' name="authenticity_token" value="<%= form_authenticity_token %>">
 																		<!-- <input type='hidden' name='summoner[id]' value=''> -->
-																		<input class='form-control form-control-block' name='summoner[summonerName]' type='text' placeholder='Search Summoners' required>
+																		<input class='form-control form-control-block' name='summoner[name]' type='text' placeholder='Search Summoners' required>
 																		<select class='form-control form-control-block' name='summoner[region]' required autofocused>
 																				<option value="na">NA</option>
 																				<option value="br">BR</option>
@@ -68,10 +68,10 @@
 																		<li>
 
 																			<div class="btn-group" style="width:100%; text-align:middle;">
-																				<a href="/summoners/<%= favorite.summonerName %>/<%= favorite.region %>">
+																				<a href="/summoners/<%= favorite.name %>/<%= favorite.region %>">
 																					<button type="button" class="btn btn-default btn-block">
 																					<img class="img img-responsive pull-left" src="<%= favorite.icon %>" height="40px" width="40px" alt="" />
-																						<h4 class="pull-left" style="text-align:middle"><%= favorite.summonerName %></h4>
+																						<h4 class="pull-left" style="text-align:middle"><%= favorite.name %></h4>
 																				</button>
 																				</a>
 																			</div>
@@ -153,9 +153,7 @@
 			<div class="navbar-form navbar-right">
 				<% if logged_in? %>
 				<!-- Postform on navbar -->
-				<a href="/users/<%= current_user.name %>/edit"><button class="btn btn-default">
-					<span class="fa fa-cog" aria-hidden="true"></span> Edit Profile
-				</button></a>
+				<%= render 'shared/edituser' %>
 				<a href="/logout"><button class="btn btn-default"><span class="fa fa-sign-out" aria-hidden="true"></span> Logout</button></a>
 				<% else %>
 				<%= render 'shared/signupform' %>

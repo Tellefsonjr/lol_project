@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   include PublicActivity::Common
-
   has_secure_password
   belongs_to :summoner
   has_many :favorites
@@ -21,15 +20,19 @@ class User < ActiveRecord::Base
   # Post relationships
   has_many :posts, dependent: :destroy
 
+  has_many :activities, as: :trackable, class_name: 'PublicActivity::Activity', dependent: :destroy
 
   # Validations upon create User
   EMAIL_REGEX = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]+)\z/i
   validates :name, presence: true, length: { in: 2..255 }
 	validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: EMAIL_REGEX }
 	validates :password, confirmation: true
+  after_initialize :init
 
+  def init
+    self.avatar  ||= "https://thesocietypages.org/socimages/files/2009/05/vimeo.jpg"         #will set the default value only if it's nil
+  end
 	before_save do
-    self.avatar = "https://thesocietypages.org/socimages/files/2009/05/vimeo.jpg"
     self.name.downcase!
 		self.email.downcase!
 	end
@@ -43,6 +46,9 @@ class User < ActiveRecord::Base
  # Unfollows a user.
  def unfollow(other_user)
    active_relationships.find_by(followed_id: other_user.id).destroy
+   @activity = PublicActivity::Activity.find_by(owner: self, recipient: other_user)
+   @activity.destroy
+
  end
 
  # Returns true if the current user is following the other user.

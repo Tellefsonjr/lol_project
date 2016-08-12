@@ -1,0 +1,57 @@
+<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editUserModal"><span class="fa fa-cog" aria-hidden="true"></span> Edit Profile</button>
+
+<div style="color:black" class="modal" id="editUserModal" tabindex="-1" role="dialog"
+aria-labelledby="editUserModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" id="editUserModalLabel">Update your profile</h4>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6 text-center">
+          <%= image_tag("#{@current_user.avatar}", height:"150px", width:"150px") + "Current Avatar" %>
+
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+
+          <%= form_for(@current_user, :html => {:class => "form-horizontal"}) do |f| %>
+            <%= render 'shared/error_messages' %>
+            <div class="form-group col-sm-10">
+            <%= f.label :name, class:'col-sm-2 col-sm-2 control-label' %>
+            <%= f.text_field :name, class: 'form-control' %>
+            </div>
+
+            <div class="form-group col-sm-10">
+            <%= f.label :email, class:'col-sm-2 control-label' %>
+            <%= f.email_field :email, class: 'form-control' %>
+            </div>
+            <div class="form-group col-sm-10">
+            <%= f.label :password, class:'col-sm-2 control-label' %>
+            <%= f.password_field :password, class: 'form-control' %>
+            </div>
+            <div class="form-group col-sm-10">
+            <%= f.label :password_confirmation, "Confirmation", class:'col-sm-2 control-label' %>
+            <%= f.password_field :password_confirmation, class: 'form-control' %>
+            </div>
+            <div class="form-group col-sm-10">
+            <%= f.label :avatar, class:'col-sm-2 control-label' %>
+            <%= f.text_field :avatar, class: 'form-control' %>
+            </div>
+            <%= f.submit "Save changes", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+</div>
